@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>AI Bot</h2>
+
+<input id="soru" placeholder="Bir şey yaz..." style="width:300px;">
+<button onclick="sor()">Gönder</button>
+
+<pre id="cevap">Burada cevap çıkacak</pre>
+
 <script>
 async function sor() {
   const soru = document.getElementById("soru").value;
@@ -18,3 +29,6 @@ async function sor() {
     data.choices[0].message.content;
 }
 </script>
+
+</body>
+</html>
