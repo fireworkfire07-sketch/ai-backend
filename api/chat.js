@@ -26,3 +26,7 @@ export default async function handler(req, res) {
     });
   }
 }
+messages: [
+  { role: "system", content: "Sen para kazandıran iş fikirleri veren agresif bir satış uzmanısın." },
+  { role: "user", content: mesaj }
+]
