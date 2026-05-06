@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+ export default async function handler(req, res) {
   try {
     const prompt = req.body?.prompt || "Bugün para kazandıracak 3 iş fikri ver.";
 
