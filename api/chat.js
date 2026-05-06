@@ -1,73 +1,50 @@
-export default function Home() {
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#0f172a",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontFamily: "Arial",
-        color: "white",
-      }}
-    >
-      <div
-        style={{
-          background: "#111827",
-          padding: "40px",
-          borderRadius: "24px",
-          width: "90%",
-          maxWidth: "520px",
-          textAlign: "center",
-          boxShadow: "0 0 30px rgba(0,0,0,0.4)",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "42px",
-            marginBottom: "10px",
-          }}
-        >
-          ORHAN AI
-        </h1>
+export default async function handler(req, res) {
+  try {
+    const { message } = req.body || {};
 
-        <p
-          style={{
-            opacity: 0.7,
-            marginBottom: "24px",
-          }}
-        >
-          Dijital İkiz Sistemi Aktif
-        </p>
+    if (!message) {
+      return res.status(400).json({ reply: "Mesaj boş geldi." });
+    }
 
-        <input
-          placeholder="Mesaj yaz..."
-          style={{
-            width: "100%",
-            padding: "16px",
-            borderRadius: "14px",
-            border: "none",
-            marginBottom: "14px",
-            boxSizing: "border-box",
-            fontSize: "16px",
-          }}
-        />
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ reply: "OPENAI_API_KEY eksik." });
+    }
 
-        <button
-          style={{
-            width: "100%",
-            padding: "16px",
-            borderRadius: "14px",
-            border: "none",
-            background: "#2563eb",
-            color: "white",
-            fontSize: "18px",
-            cursor: "pointer",
-          }}
-        >
-          Gönder
-        </button>
-      </div>
-    </div>
-  );
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: "Sen Orhan’ın kısa, net ve para odaklı dijital asistanısın. Türkçe cevap ver.",
+          },
+          {
+            role: "user",
+            content: message,
+          },
+        ],
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(500).json({
+        reply: data.error?.message || "OpenAI API hatası.",
+      });
+    }
+
+    return res.status(200).json({
+      reply: data.choices?.[0]?.message?.content || "Cevap üretilemedi.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      reply: error.message || "Sunucu hatası.",
+    });
+  }
 }
