@@ -1,34 +1,57 @@
-export default async function handler(req, res) {
-  try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: "Sen Orhan’ın AI video içerik asistanısın.",
-          },
-          {
-            role: "user",
-            content: req.body.message || "Merhaba",
-          },
-        ],
-      }),
-    });
+export default function Home() {
+  return (
+    <div
+      style={{
+        background: "#0f172a",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        fontFamily: "Arial",
+      }}
+    >
+      <div
+        style={{
+          background: "#111827",
+          padding: "40px",
+          borderRadius: "20px",
+          width: "90%",
+          maxWidth: "500px",
+          textAlign: "center",
+        }}
+      >
+        <h1 style={{ fontSize: "42px" }}>ORHAN AI</h1>
 
-    const data = await response.json();
+        <p style={{ opacity: 0.7 }}>
+          Dijital İkiz Sistemi
+        </p>
 
-    res.status(200).json({
-      reply: data.choices?.[0]?.message?.content || "Cevap alınamadı",
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    });
-  }
+        <input
+          placeholder="Mesaj yaz..."
+          style={{
+            width: "100%",
+            padding: "15px",
+            borderRadius: "12px",
+            border: "none",
+            marginBottom: "15px",
+          }}
+        />
+
+        <button
+          style={{
+            width: "100%",
+            padding: "15px",
+            borderRadius: "12px",
+            border: "none",
+            background: "#2563eb",
+            color: "white",
+            fontSize: "18px",
+          }}
+        >
+          Gönder
+        </button>
+      </div>
+    </div>
+  );
 }
