@@ -1,111 +1,27 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ORHAN AI</title>
-
 <style>
 body{
-background:#0f0f0f;
-color:white;
-font-family:Arial;
-padding:20px;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial;
+  padding:20px;
 }
-
-h1{
-font-size:42px;
-margin-bottom:20px;
-}
-
+h1{font-size:42px;}
 input{
-width:100%;
-padding:15px;
-font-size:18px;
-border:none;
-border-radius:12px;
-margin-bottom:10px;
+  width:100%;
+  padding:15px;
+  font-size:18px;
+  border-radius:12px;
+  border:none;
 }
-
 button{
-width:100%;
-padding:15px;
-font-size:18px;
-font-weight:bold;
-background:#00ff88;
-border:none;
-border-radius:12px;
-color:black;
-}
-
-#result{
-margin-top:20px;
-white-space:pre-wrap;
-line-height:1.7;
-font-size:18px;
-}
-</style>
-</head>
-
-<body>
-
-<h1>ORHAN AI ⚡</h1>
-
-<input
-id="prompt"
-placeholder="Ne istiyorsun yaz..."
-/>
-
-<button onclick="sendPrompt()">
-Gönder
-</button>
-
-<div id="result">
-Cevap burada görünecek...
-</div>
-
-<script>
-
-async function sendPrompt(){
-
-const prompt =
-document.getElementById("prompt").value;
-
-const result =
-document.getElementById("result");
-
-result.innerText = "Düşünüyor...";
-
-try{
-
-const response = await fetch(
-"https://ai-backend-one-theta.vercel.app/api/brain",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-prompt:prompt
-})
-}
-);
-
-const data = await response.text();
-
-result.innerText = data;
-
-}catch(err){
-
-result.innerText =
-"Hata oluştu: " + err.message;
-
-}
-
-}
-
-</script>
-
-</body>
-</html>
+  width:100%;
+  padding:15px;
+  margin-top:10px;
+  font-size:18px;
+  font-weight:bold
