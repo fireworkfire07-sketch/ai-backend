@@ -1,107 +1,27 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ORHAN AI</title>
-
-<style>
-body{
-background:#111;
-color:white;
-font-family:Arial;
-padding:20px;
-}
-
-h1{
-font-size:40px;
-}
-
-input{
-width:100%;
-padding:15px;
-border:none;
-border-radius:10px;
-font-size:18px;
-margin-top:20px;
-}
-
-button{
-width:100%;
-padding:15px;
-border:none;
-border-radius:10px;
-font-size:18px;
-font-weight:bold;
-background:#00ff88;
-color:black;
-margin-top:10px;
-}
-
-#result{
-margin-top:20px;
-white-space:pre-wrap;
-line-height:1.6;
-font-size:18px;
-}
-</style>
 </head>
-
 <body>
+<h1>ORHAN AI</h1>
 
-<h1>ORHAN AI ⚡</h1>
+<input id="p" placeholder="Yaz..." style="width:100%;font-size:22px;padding:12px;">
+<button onclick="go()" style="font-size:22px;padding:12px;margin-top:10px;">Gönder</button>
 
-<input
-id="prompt"
-placeholder="Ne istiyorsun yaz..."
->
-
-<button onclick="sendPrompt()">
-Gönder
-</button>
-
-<div id="result">
-Cevap burada görünecek...
-</div>
+<pre id="r">Hazır...</pre>
 
 <script>
-
-async function sendPrompt(){
-
-const prompt =
-document.getElementById("prompt").value;
-
-const result =
-document.getElementById("result");
-
-result.innerText = "Düşünüyor...";
-
-try{
-
-const response = await fetch("/api/brain",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-prompt:prompt
-})
-});
-
-const data = await response.text();
-
-result.innerText = data;
-
-}catch(error){
-
-result.innerText =
-"Hata oluştu: " + error.message;
-
+async function go(){
+  r.innerText="Düşünüyor...";
+  let cevap = await fetch("/api/brain",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({prompt:p.value})
+  });
+  r.innerText = await cevap.text();
 }
-
-}
-
 </script>
-
 </body>
 </html>
