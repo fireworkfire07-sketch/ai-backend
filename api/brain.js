@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+import fs from "fs";export default async function handler(req, res) {
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -22,12 +22,27 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+const yeniKayit = {
+  tarih: new Date().toISOString(),
+  fikir: data.choices[0].message.content
+};
 
+const eskiKayitlar = JSON.parse(
+  fs.readFileSync("records.json", "utf8")
+);
+
+eskiKayitlar.push(yeniKayit);
+
+fs.writeFileSync(
+  "records.json",
+  JSON.stringify(eskiKayitlar, null, 2)
+);
     console.log("YENİ FİKİRLER:", data.choices[0].message.content);
 
     res.status(200).json(data);
 
   } catch (err) {
     res.status(500).json({ error: err.message });
+  
   }
 }
