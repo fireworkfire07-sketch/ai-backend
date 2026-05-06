@@ -1,32 +1,34 @@
 export default async function handler(req, res) {
   try {
-    const mesaj = req.body?.mesaj || "Selam";
-
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": "Bearer " + process.env.OPENAI_API_KEY,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4.1-mini",
+        model: "gpt-4o-mini",
         messages: [
-          { role: "user", content: mesaj }
-        ]
-      })
+          {
+            role: "system",
+            content: "Sen Orhan’ın AI video içerik asistanısın.",
+          },
+          {
+            role: "user",
+            content: req.body.message || "Merhaba",
+          },
+        ],
+      }),
     });
 
     const data = await response.json();
-    res.status(200).json(data);
 
+    res.status(200).json({
+      reply: data.choices?.[0]?.message?.content || "Cevap alınamadı",
+    });
   } catch (error) {
     res.status(500).json({
-      error: "Hata oluştu",
-      detail: error.message
+      error: error.message,
     });
   }
 }
-messages: [
-  { role: "system", content: "Sen para kazandıran iş fikirleri veren agresif bir satış uzmanısın." },
-  { role: "user", content: mesaj }
-]
