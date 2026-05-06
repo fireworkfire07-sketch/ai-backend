@@ -1,34 +1,77 @@
-export default async function handler(req, res) {
-  try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: "Sen Orhan’ın AI video içerik asistanısın.",
-          },
-          {
-            role: "user",
-            content: req.body.message || "Merhaba",
-          },
-        ],
-      }),
-    });
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Orhan AI</title>
 
-    const data = await response.json();
+  <style>
+    body{
+      margin:0;
+      background:#0f172a;
+      color:white;
+      font-family:Arial;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
 
-    res.status(200).json({
-      reply: data.choices?.[0]?.message?.content || "Cevap alınamadı",
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    });
-  }
-}
+    .box{
+      text-align:center;
+      background:#111827;
+      padding:40px;
+      border-radius:20px;
+      width:90%;
+      max-width:500px;
+      box-shadow:0 0 30px rgba(0,0,0,0.4);
+    }
+
+    h1{
+      font-size:40px;
+      margin-bottom:10px;
+    }
+
+    p{
+      opacity:.8;
+      margin-bottom:30px;
+    }
+
+    input{
+      width:100%;
+      padding:15px;
+      border:none;
+      border-radius:12px;
+      margin-bottom:15px;
+      font-size:16px;
+    }
+
+    button{
+      width:100%;
+      padding:15px;
+      border:none;
+      border-radius:12px;
+      background:#3b82f6;
+      color:white;
+      font-size:18px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#2563eb;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h1>ORHAN AI</h1>
+  <p>Dijital İkiz Sistemi</p>
+
+  <input type="text" placeholder="Mesaj yaz...">
+  <button>Gönder</button>
+</div>
+
+</body>
+</html>
