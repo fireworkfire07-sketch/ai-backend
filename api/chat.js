@@ -1,29 +1,42 @@
 export default function Home() {
   return (
-    <main style={{
-      minHeight: "100vh",
-      background: "#0f172a",
-      color: "white",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      fontFamily: "Arial, sans-serif",
-      padding: "20px"
-    }}>
-      <div style={{
-        width: "100%",
-        maxWidth: "520px",
-        background: "#111827",
-        borderRadius: "24px",
-        padding: "32px",
-        boxShadow: "0 20px 60px rgba(0,0,0,.45)",
-        textAlign: "center"
-      }}>
-        <h1 style={{ fontSize: "42px", margin: "0 0 10px" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#0f172a",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontFamily: "Arial",
+        color: "white",
+      }}
+    >
+      <div
+        style={{
+          background: "#111827",
+          padding: "40px",
+          borderRadius: "24px",
+          width: "90%",
+          maxWidth: "520px",
+          textAlign: "center",
+          boxShadow: "0 0 30px rgba(0,0,0,0.4)",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "42px",
+            marginBottom: "10px",
+          }}
+        >
           ORHAN AI
         </h1>
 
-        <p style={{ opacity: .75, marginBottom: "24px" }}>
+        <p
+          style={{
+            opacity: 0.7,
+            marginBottom: "24px",
+          }}
+        >
           Dijital İkiz Sistemi Aktif
         </p>
 
@@ -34,26 +47,27 @@ export default function Home() {
             padding: "16px",
             borderRadius: "14px",
             border: "none",
-            fontSize: "16px",
             marginBottom: "14px",
-            boxSizing: "border-box"
+            boxSizing: "border-box",
+            fontSize: "16px",
           }}
         />
 
-        <button style={{
-          width: "100%",
-          padding: "16px",
-          borderRadius: "14px",
-          border: "none",
-          background: "#2563eb",
-          color: "white",
-          fontSize: "18px",
-          fontWeight: "bold",
-          cursor: "pointer"
-        }}>
+        <button
+          style={{
+            width: "100%",
+            padding: "16px",
+            borderRadius: "14px",
+            border: "none",
+            background: "#2563eb",
+            color: "white",
+            fontSize: "18px",
+            cursor: "pointer",
+          }}
+        >
           Gönder
         </button>
       </div>
-    </main>
+    </div>
   );
 }
