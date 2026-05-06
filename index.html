@@ -1,110 +1,111 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Orhan AI</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <style>
-    body{
-      background:#0f0f0f;
-      color:white;
-      font-family:Arial;
-      padding:20px;
-    }
+<title>ORHAN AI</title>
 
-    h1{
-      font-size:40px;
-    }
+<style>
+body{
+background:#0f0f0f;
+color:white;
+font-family:Arial;
+padding:20px;
+}
 
-    input{
-      width:100%;
-      padding:15px;
-      border:none;
-      border-radius:10px;
-      font-size:18px;
-      margin-top:20px;
-    }
+h1{
+font-size:42px;
+margin-bottom:20px;
+}
 
-    button{
-      width:100%;
-      padding:15px;
-      border:none;
-      border-radius:10px;
-      background:#00ff88;
-      color:black;
-      font-size:18px;
-      margin-top:10px;
-      font-weight:bold;
-    }
+input{
+width:100%;
+padding:15px;
+font-size:18px;
+border:none;
+border-radius:12px;
+margin-bottom:10px;
+}
 
-    #result{
-      margin-top:20px;
-      white-space:pre-wrap;
-      line-height:1.6;
-      font-size:18px;
-    }
-  </style>
+button{
+width:100%;
+padding:15px;
+font-size:18px;
+font-weight:bold;
+background:#00ff88;
+border:none;
+border-radius:12px;
+color:black;
+}
+
+#result{
+margin-top:20px;
+white-space:pre-wrap;
+line-height:1.7;
+font-size:18px;
+}
+</style>
 </head>
 
 <body>
 
-  <h1>ORHAN AI ⚡</h1>
+<h1>ORHAN AI ⚡</h1>
 
-  <input
-    type="text"
-    id="prompt"
-    placeholder="Ne istiyorsun yaz..."
-  />
+<input
+id="prompt"
+placeholder="Ne istiyorsun yaz..."
+/>
 
-  <button onclick="sendPrompt()">
-    Gönder
-  </button>
+<button onclick="sendPrompt()">
+Gönder
+</button>
 
-  <div id="result">
-    Cevap burada çıkacak...
-  </div>
+<div id="result">
+Cevap burada görünecek...
+</div>
 
-  <script>
-    async function sendPrompt() {
+<script>
 
-      const prompt =
-        document.getElementById("prompt").value;
+async function sendPrompt(){
 
-      const result =
-        document.getElementById("result");
+const prompt =
+document.getElementById("prompt").value;
 
-      result.innerText = "Düşünüyor...";
+const result =
+document.getElementById("result");
 
-      try {
+result.innerText = "Düşünüyor...";
 
-        const response = await fetch(
-          "https://ai-backend-one-theta.vercel.app/api/brain",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              prompt: prompt
-            })
-          }
-        );
+try{
 
-        const data = await response.json();
+const response = await fetch(
+"https://ai-backend-one-theta.vercel.app/api/brain",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+prompt:prompt
+})
+}
+);
 
-        result.innerText =
-          data.choices?.[0]?.message?.content ||
-          data.message?.content ||
-          JSON.stringify(data, null, 2);
+const data = await response.text();
 
-      } catch (error) {
+result.innerText = data;
 
-        result.innerText =
-          "Hata oluştu: " + error.message;
-      }
-    }
-  </script>
+}catch(err){
+
+result.innerText =
+"Hata oluştu: " + err.message;
+
+}
+
+}
+
+</script>
 
 </body>
 </html>
