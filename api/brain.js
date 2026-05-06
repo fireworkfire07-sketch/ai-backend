@@ -1,5 +1,7 @@
-import fs from "fs";export default async function handler(req, res) {
+export default async function handler(req, res) {
   try {
+    const prompt = req.body?.prompt || "Bugün para kazandıracak 3 iş fikri ver.";
+
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -15,34 +17,40 @@ import fs from "fs";export default async function handler(req, res) {
           },
           {
             role: "user",
-            content: "Bugün para kazandıracak 3 iş fikri ver."
+            content: prompt
           }
         ]
       })
     });
 
     const data = await response.json();
-const yeniKayit = {
-  tarih: new Date().toISOString(),
-  fikir: data.choices[0].message.content
-};
+    const answer = data.choices?.[0]?.message?.content || "Cevap alınamadı.";
 
-const eskiKayitlar = JSON.parse(
-  fs.readFileSync("records.json", "utf8")
-);
+    await fetch(process.env.SUPABASE_URL + "/rest/v1/records", {
+      method: "POST",
+      headers: {
+        "apikey": process.env.SUPABASE_KEY,
+        "Authorization": "Bearer " + process.env.SUPABASE_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify({
+        content: JSON.stringify({
+          prompt: prompt,
+          answer: answer
+        })
+      })
+    });
 
-eskiKayitlar.push(yeniKayit);
-
-fs.writeFileSync(
-  "records.json",
-  JSON.stringify(eskiKayitlar, null, 2)
-);
-    console.log("YENİ FİKİRLER:", data.choices[0].message.content);
-
-    res.status(200).json(data);
+    res.status(200).json({
+      prompt: prompt,
+      answer: answer
+    });
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  
+    res.status(500).json({
+      error: "Hata oluştu",
+      detail: err.message
+    });
   }
 }
