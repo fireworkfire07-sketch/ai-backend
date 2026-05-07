@@ -1,8 +1,14 @@
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
+
+  if (req.method !== "POST") {
+    return res.status(200).json({
+      reply: "API çalışıyor."
+    });
+  }
 
   try {
 
-    const message = req.body.message || "";
+    const { message } = req.body;
 
     const response = await fetch(
       "https://api.openai.com/v1/chat/completions",
@@ -20,34 +26,16 @@ module.exports = async (req, res) => {
           model: "gpt-4o-mini",
 
           messages: [
-
             {
               role: "system",
-
-              content: `
-Sen ORHAN CORE AI isimli ana otomasyon sistemisin.
-
-Görevlerin:
-- Tüm projeleri yönet
-- En hızlı para görevini seç
-- Satış mesajları oluştur
-- Yeni proje üret
-- Düşük kazançlı işleri ele
-- Günlük rapor hazırla
-- Orhan adına stratejik düşün
-
-Her zaman kısa, net, uygulanabilir cevap ver.
-`
+              content:
+              "Sen ORHAN CORE AI isimli güçlü bir yapay zekasın."
             },
-
             {
               role: "user",
               content: message
             }
-
-          ],
-
-          temperature: 0.8
+          ]
 
         })
 
@@ -56,20 +44,18 @@ Her zaman kısa, net, uygulanabilir cevap ver.
 
     const data = await response.json();
 
-    const reply =
+    return res.status(200).json({
+      reply:
       data.choices?.[0]?.message?.content ||
-      "Cevap üretilemedi.";
-
-    res.status(200).json({
-      reply
+      "Cevap üretilemedi."
     });
 
-  } catch (error) {
+  } catch (err) {
 
-    res.status(500).json({
-      error: error.message
+    return res.status(500).json({
+      reply: "HATA: " + err.message
     });
 
   }
 
-};
+}
