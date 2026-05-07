@@ -1,5 +1,3 @@
 export default async function handler(req, res) {
-  return res.status(200).json({
-    reply: "Orhan AI aktif 🚀"
-  });
+  res.status(200).json({ reply: "TEST ÇALIŞTI" });
 }
