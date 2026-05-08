@@ -11,7 +11,7 @@
   <input id="messageInput" type="text" placeholder="Bir şey yaz..." />
   <button onclick="sendMessage()">Gönder</button>
 
-  <p id="answerBox">Burada cevap çıkacak</p>
+  <pre id="answerBox">Burada cevap çıkacak</pre>
 
   <script>
     async function sendMessage() {
@@ -20,7 +20,7 @@
       const message = input.value.trim();
 
       if (!message) {
-        answerBox.innerText = "Lütfen bir mesaj yaz.";
+        answerBox.innerText = "Mesaj yaz.";
         return;
       }
 
@@ -35,18 +35,15 @@
           body: JSON.stringify({ message })
         });
 
-        const data = await response.json();
+        const text = await response.text();
 
         answerBox.innerText =
-          data.answer ||
-          data.reply ||
-          data.error ||
-          "Cevap alınamadı.";
+          "HTTP STATUS: " + response.status + "\n\n" + text;
+
       } catch (error) {
-        answerBox.innerText = "Bağlantı hatası: " + error.message;
+        answerBox.innerText = "FRONTEND HATASI:\n" + error.message;
       }
     }
   </script>
 </body>
 </html>
-// redeploy trigger 4
