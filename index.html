@@ -3,82 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orhan AI</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .box {
-      width: 92%;
-      max-width: 520px;
-      background: #111827;
-      padding: 22px;
-      border-radius: 18px;
-      box-shadow: 0 0 25px rgba(0,0,0,.4);
-    }
-    h1 { text-align: center; }
-    textarea {
-      width: 100%;
-      height: 120px;
-      border-radius: 12px;
-      padding: 12px;
-      border: none;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      margin-top: 12px;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      background: #22c55e;
-      color: #052e16;
-      font-size: 18px;
-      font-weight: bold;
-    }
-    #cevap {
-      margin-top: 16px;
-      background: #020617;
-      padding: 14px;
-      border-radius: 12px;
-      min-height: 70px;
-      white-space: pre-wrap;
-    }
-  </style>
+  <title>AI Bot</title>
 </head>
 <body>
-  <div class="box">
-    <h1>Orhan AI</h1>
+  <h1>AI Bot</h1>
 
-    <textarea id="soru" placeholder="Orhan AI'ye yaz..."></textarea>
-    <button onclick="cevapVer()">AI Cevap Ver</button>
+  <input id="messageInput" type="text" placeholder="Bir şey yaz..." />
+  <button onclick="sendMessage()">Gönder</button>
 
-    <div id="cevap">Hazır.</div>
-  </div>
+  <p id="answerBox">Burada cevap çıkacak</p>
 
   <script>
-    function cevapVer() {
-      const soru = document.getElementById("soru").value.trim();
-      const cevap = document.getElementById("cevap");
+    async function sendMessage() {
+      const input = document.getElementById("messageInput");
+      const answerBox = document.getElementById("answerBox");
+      const message = input.value.trim();
 
-      if (!soru) {
-        cevap.innerText = "Önce bir şey yaz.";
+      if (!message) {
+        answerBox.innerText = "Lütfen bir mesaj yaz.";
         return;
       }
 
-      cevap.innerText =
-        "Orhan AI çalışıyor.\n\n" +
-        "Yazdığın mesaj: " + soru + "\n\n" +
-        "Şu an test modu aktif. Bir sonraki adımda gerçek ChatGPT API bağlanacak.";
+      answerBox.innerText = "Bekle...";
+
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+
+        answerBox.innerText =
+          data.answer ||
+          data.reply ||
+          data.error ||
+          "Cevap alınamadı.";
+      } catch (error) {
+        answerBox.innerText = "Bağlantı hatası: " + error.message;
+      }
     }
   </script>
 </body>
 </html>
+// redeploy trigger 4
