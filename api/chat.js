@@ -1,78 +1,52 @@
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(200).json({
-      ok: true,
-      message: "AI Backend calisiyor. POST /api/chat kullan."
-    });
-  }
-
   try {
-    const { message } = req.body || {};
+    if (req.method !== "POST") {
+      return res.status(200).json({
+        ok: true,
+        message: "AI Backend aktif."
+      });
+    }
+
+    const message = req.body?.message;
 
     if (!message) {
       return res.status(400).json({
         ok: false,
-        error: "Mesaj bos olamaz."
+        error: "Mesaj gerekli"
       });
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
-
-    if (!apiKey) {
-      return res.status(500).json({
-        ok: false,
-        error: "OPENAI_API_KEY Vercel Environment Variables icinde yok."
-      });
-    }
-
-    const openaiResponse = await fetch(
+    const response = await fetch(
       "https://api.openai.com/v1/chat/completions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
           messages: [
             {
-              role: "system",
-              content:
-                "Sen Orhan'in merkezi AI backend asistanisin. Kisa, net, pratik ve Turkce cevap ver. Para, proje, otomasyon ve is gelistirme odakli davran."
-            },
-            {
               role: "user",
               content: message
             }
-          ],
-          temperature: 0.7
+          ]
         })
       }
     );
 
-    const data = await openaiResponse.json();
-
-    if (!openaiResponse.ok) {
-      return res.status(openaiResponse.status).json({
-        ok: false,
-        error: "OpenAI cevap hatasi",
-        detail: data
-      });
-    }
-
-    const answer =
-      data?.choices?.[0]?.message?.content || "Cevap alinamadi.";
+    const data = await response.json();
 
     return res.status(200).json({
       ok: true,
-      answer
+      reply: data.choices?.[0]?.message?.content || "Cevap yok"
     });
-  } catch (error) {
+
+  } catch (err) {
     return res.status(500).json({
       ok: false,
-      error: "Sunucu hatasi",
-      detail: error.message
+      error: err.message
     });
   }
 }
