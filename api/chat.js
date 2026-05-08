@@ -25,28 +25,31 @@ export default async function handler(req, res) {
       });
     }
 
-    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content:
-              "Sen Orhan'in merkezi AI backend asistanisin. Kisa, net, pratik, Turkce cevap ver. Para, proje, otomasyon ve is gelistirme odakli davran."
-          },
-          {
-            role: "user",
-            content: message
-          }
-        ],
-        temperature: 0.7
-      })
-    });
+    const openaiResponse = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content:
+                "Sen Orhan'in merkezi AI backend asistanisin. Kisa, net, pratik ve Turkce cevap ver. Para, proje, otomasyon ve is gelistirme odakli davran."
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ],
+          temperature: 0.7
+        })
+      }
+    );
 
     const data = await openaiResponse.json();
 
